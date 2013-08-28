@@ -68,6 +68,26 @@ namespace PushoverClient
         {
             PushResponse retval = new PushResponse();
 
+            //  Try the passed user key first
+            string userGroupKey = userKey;
+
+            //  Fallback to the default
+            if(string.IsNullOrEmpty(userGroupKey))
+                userGroupKey = this.DefaultUserGroupSendKey;
+            else if(string.IsNullOrEmpty(userGroupKey))
+                throw new ArgumentException("User key must be supplied");
+
+            object args = new
+            {
+                token = this.AppKey,
+                user = userKey,
+                device = device,
+                title = title,
+                message = message
+            };
+
+            retval = _baseAPIUrl.PostToUrl(args).FromJson<PushResponse>();
+
             return retval;
         }
     }
