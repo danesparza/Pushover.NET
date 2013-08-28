@@ -21,23 +21,23 @@ In your application, call:
 
 ##### Pushing a message:
 
-      using PushoverClient;
-      
-      namespace ConsoleApplication1
-      {
-          class Program
-          {
-              static void Main(string[] args)
-              {
-                  Pushover pclient = new Pushover("Your-apps-API-Key-here");
-      
-                  PushResponse response = pclient.Push(
-                      "Test title", 
-                      "This is the test message.", 
-                      "User-key-to-send-to-here"
-                  );
-              }
-          }
-      }
+	using PushoverClient;
+	
+	namespace ConsoleApplication1
+	{
+	  class Program
+	  {
+	      static void Main(string[] args)
+	      {
+	          Pushover pclient = new Pushover("Your-apps-API-Key-here");
+	
+	          PushResponse response = pclient.Push(
+	              "Test title", 
+	              "This is the test message.", 
+	              "User-key-to-send-to-here"
+	          );
+	      }
+	  }
+	}
 
 
