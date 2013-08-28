@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace PushoverClient.Tests
 {
@@ -10,8 +9,8 @@ namespace PushoverClient.Tests
         public void PushWithValidParms_ReturnsSuccessful()
         {
             //  Arrange
-            string testAppKey = "a4RoPkZ7GYNU1XiiHHybqQG9EWMuTt";
-            string testUserKey = "uC3wSuMNinuxKWsia6f6yox62vb13w";
+            string testAppKey = "YOURAPPKEY";
+            string testUserKey = "YOURUSERKEY";
             string title = "Test title";
             string message = "This is a test push notification message";
 
