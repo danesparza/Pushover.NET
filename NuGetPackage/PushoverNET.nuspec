@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+    <metadata>
+        <id>PushoverNET</id>
+        <version>1.0.0</version>
+        <title>Pushover .NET</title>
+        <authors>Dan Esparza</authors>
+        <owners>danesparza</owners>
+        <projectUrl>https://github.com/danesparza/Pushover.NET</projectUrl>
+        <iconUrl>http://a4.mzstatic.com/us/r1000/049/Purple4/v4/cf/63/75/cf6375e7-7825-365a-ba8c-3587823d9c58/mzl.flrsoalq.175x175-75.jpg</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>.NET Wrapper for the Pushover API.</description>
+        <summary />
+        <releaseNotes>Initial release</releaseNotes>
+        <copyright>Copyright 2013</copyright>
+        <language>en-US</language>
+        <tags>push notifications notification ios android pushover</tags>
+        <dependencies>
+            <dependency id="ServiceStack.Text" version="3.9.59" />
+        </dependencies>
+        <references />
+    </metadata>
+    <files>
+        <file src="..\PushoverClient\bin\Release\PushoverClient.dll" target="lib\net40\PushoverClient.dll" />
+    </files>
+</package>
