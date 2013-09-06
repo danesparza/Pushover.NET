@@ -32,10 +32,32 @@ namespace SendPush
                     options.User = userGroupKey;
                 }
 
-                //  Send the message
-                Pushover pclient = new Pushover(options.From);
-                PushResponse response = pclient.Push(options.Title, options.Message, options.User);
+                //  Make sure we have our required items:
+                if(OptionsValid(options))
+                {
+                    //  Send the message
+                    Pushover pclient = new Pushover(options.From);
+                    PushResponse response = pclient.Push(options.Title, options.Message, options.User);
+                }
+                else
+                    Console.WriteLine(options.GetUsage());
+
             }
+        }
+
+        static bool OptionsValid(Options options)
+        {
+            bool retval = false;
+
+            if(!string.IsNullOrEmpty(options.From) &&
+                !string.IsNullOrEmpty(options.User) &&
+                !string.IsNullOrEmpty(options.Title) &&
+                !string.IsNullOrEmpty(options.Message))
+            {
+                retval = true;
+            }
+
+            return retval;
         }
     }
 }
