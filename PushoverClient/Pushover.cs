@@ -76,7 +76,7 @@ namespace PushoverClient
             object args = new
             {
                 token = this.AppKey,
-                user = userKey,
+                user = userGroupKey,
                 device = device,
                 title = title,
                 message = message
