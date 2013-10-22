@@ -1,7 +1,7 @@
 Pushover.NET
 ============
 
-.NET Wrapper for the Pushover API
+.NET Wrapper for the [Pushover](http://pushover.net) API.  Pushover makes it easy to send real-time notifications to your Android and iOS devices.
 
 ### Quick Start
 
