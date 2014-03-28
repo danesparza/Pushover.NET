@@ -10,34 +10,38 @@ Pushover.NET
 
 In your application, call:
 
-	Pushover pclient = new Pushover("Your-apps-API-Key-here");
-	PushResponse response = pclient.Push(
-                      "Test title", 
-                      "This is the test message.", 
-                      "User-key-to-send-to-here"
-                  );
+```CSharp
+Pushover pclient = new Pushover("Your-apps-API-Key-here");
+PushResponse response = pclient.Push(
+              "Test title", 
+              "This is the test message.", 
+              "User-key-to-send-to-here"
+          );
+```
 
 ### Examples
 
 ##### Pushing a message:
 
-	using PushoverClient;
-	
-	namespace ConsoleApplication1
-	{
-	  class Program
-	  {
-	      static void Main(string[] args)
-	      {
-	          Pushover pclient = new Pushover("Your-apps-API-Key-here");
-	
-	          PushResponse response = pclient.Push(
-	              "Test title", 
-	              "This is the test message.", 
-	              "User-key-to-send-to-here"
-	          );
-	      }
-	  }
-	}
+```CSharp
+using PushoverClient;
+
+namespace ConsoleApplication1
+{
+  class Program
+  {
+      static void Main(string[] args)
+      {
+          Pushover pclient = new Pushover("Your-apps-API-Key-here");
+
+          PushResponse response = pclient.Push(
+              "Test title", 
+              "This is the test message.", 
+              "User-key-to-send-to-here"
+          );
+      }
+  }
+}
+```
 
 
