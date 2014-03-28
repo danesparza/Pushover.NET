@@ -5,8 +5,12 @@ Pushover.NET
 
 ### Quick Start
 
-1. Add a reference to PushoverClient.dll, or install the NuGet package (located here https://www.nuget.org/packages/PushoverNET/ )
-2. Next, you will need to provide Pushover.NET with your API key in code.  Need help finding your API key?  Check here: https://pushover.net/faq
+Install the NuGet package
+```powershell
+Install-Package PushoverNET
+```
+
+Next, you will need to provide Pushover.NET with your API key in code.  Need help finding your API key?  Check here: https://pushover.net/faq
 
 In your application, call:
 
