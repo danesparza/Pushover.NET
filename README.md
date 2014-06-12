@@ -5,7 +5,7 @@ Pushover.NET
 
 ### Quick Start
 
-Install the NuGet package
+Install the [NuGet package](http://www.nuget.org/packages/PushoverNET/)
 ```powershell
 Install-Package PushoverNET
 ```
