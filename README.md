@@ -1,4 +1,4 @@
-Pushover.NET [![Build status](https://ci.appveyor.com/api/projects/status/bystdxfqdhljauvs)](https://ci.appveyor.com/project/danesparza/pushover-net)
+Pushover.NET [![Build status](https://ci.appveyor.com/api/projects/status/bystdxfqdhljauvs?svg=true)](https://ci.appveyor.com/project/danesparza/pushover-net)
 ============
 
 .NET Wrapper for the [Pushover](http://pushover.net) API.  Pushover makes it easy to send real-time notifications to your Android and iOS devices.
