@@ -1,5 +1,6 @@
 ﻿using System;
 using ServiceStack.Text;
+using System.Net;
 
 namespace PushoverClient
 {
@@ -62,8 +63,6 @@ namespace PushoverClient
         /// <returns></returns>
         public PushResponse Push(string title, string message, string userKey = "", string device = "")
         {
-            PushResponse retval = new PushResponse();
-
             //  Try the passed user key first
             string userGroupKey = userKey;
 
@@ -81,10 +80,14 @@ namespace PushoverClient
                 title = title,
                 message = message
             };
-
-            retval = _baseAPIUrl.PostToUrl(args).FromJson<PushResponse>();
-
-            return retval;
+            try
+            {
+                return _baseAPIUrl.PostToUrl(args).FromJson<PushResponse>();
+            }
+            catch (WebException webEx)
+            {
+                return webEx.GetResponseBody().FromJson<PushResponse>();
+            }
         }
     }
 }
