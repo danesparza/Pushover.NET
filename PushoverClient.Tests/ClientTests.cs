@@ -9,14 +9,14 @@ namespace PushoverClient.Tests
         public void PushWithValidParms_ReturnsSuccessful()
         {
             //  Arrange
-            string testAppKey = "YOURAPPKEY";
-            string testUserKey = "YOURUSERKEY";
-            string title = "Test title";
-            string message = "This is a test push notification message";
+            var testAppKey = "";
+            var testUserKey = "";
+            var title = "Test title";
+            var message = "This is a test push notification message";
 
             //  Act
-            Pushover pclient = new Pushover(testAppKey);
-            PushResponse response = pclient.Push(title, message, testUserKey);
+            var pclient = new Pushover(testAppKey);
+            var  response = pclient.Push(title, message, testUserKey);
 
             //  Assert
             Assert.IsNotNull(response);

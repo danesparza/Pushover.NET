@@ -49,7 +49,7 @@ namespace SendPush
         {
             var help = new HelpText
             {
-                Heading = new HeadingInfo("SendPush", "0.1"),
+                Heading = new HeadingInfo("SendPush", "0.2"),
                 Copyright = new CopyrightInfo("Dan Esparza", 2013),
                 AddDashesToOption = true
             };
