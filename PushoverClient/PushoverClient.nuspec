@@ -16,7 +16,7 @@
         <language>en-US</language>
         <tags>push notifications notification ios android pushover</tags>
         <dependencies>
-            <dependency id="ServiceStack.Text" version="3.9.59" />
+            <dependency id="ServiceStack.Text" version="5.0.2" />
         </dependencies>
         <references />
     </metadata>
