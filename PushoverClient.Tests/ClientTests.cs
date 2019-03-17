@@ -7,8 +7,8 @@ namespace PushoverClient.Tests
     [TestClass]
     public class ClientTests
     {
-        private const string TEST_APP_KEY = "YOUR_KEY_HERE";
-        private const string TEST_USER_KEY = "YOUR_KEY_HERE";
+        private const string TEST_APP_KEY = "YOURAPPKEY";
+        private const string TEST_USER_KEY = "YOURUSERKEY";
 
         [TestMethod]
         public void PushWithValidParms_ReturnsSuccessful()
