@@ -28,9 +28,5 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: GithubRelease@0
-  inputs:
-    githubConnection: danesparza
-    repositoryName: danesparza/Pushover.NET
     
 
