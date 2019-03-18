@@ -31,6 +31,6 @@ steps:
 - task: GithubRelease@0
   displayName: ‘Create GitHub Release’
   inputs:
-    githubConnection: danesparza
+    githubConnection: degithub
     repositoryName: danesparza/Pushover.NET
 
