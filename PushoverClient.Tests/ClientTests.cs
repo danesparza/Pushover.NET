@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace PushoverClient.Tests
 {
@@ -14,12 +14,12 @@ namespace PushoverClient.Tests
         public void PushWithValidParms_ReturnsSuccessful()
         {
             //  Arrange
-            string title = "Test title";
-            string message = "This is a test push notification message";
+            var title = "Test title";
+            var message = "This is a test push notification message";
 
             //  Act
-            Pushover pclient = new Pushover(TEST_APP_KEY);
-            PushResponse response = pclient.Push(title, message, TEST_USER_KEY);
+            var pclient = new Pushover(TEST_APP_KEY);
+            var response = pclient.Push(title, message, TEST_USER_KEY);
 
             //  Assert
             Assert.IsNotNull(response);
@@ -30,12 +30,12 @@ namespace PushoverClient.Tests
         public async Task PushAsyncWithValidParms_ReturnsSuccessful()
         {
             //  Arrange
-            string title = "Test title";
-            string message = "This is a test push notification message";
+            var title = "Test title";
+            var message = "This is a test push notification message";
 
             //  Act
-            Pushover pclient = new Pushover(TEST_APP_KEY);
-            PushResponse response = await pclient.PushAsync(title, message, TEST_USER_KEY);
+            var pclient = new Pushover(TEST_APP_KEY);
+            var response = await pclient.PushAsync(title, message, TEST_USER_KEY);
 
             //  Assert
             Assert.IsNotNull(response);
@@ -47,12 +47,12 @@ namespace PushoverClient.Tests
         public async Task PushWithNoKey_ReturnsError()
         {
             //  Arrange
-            string title = "Test title";
-            string message = "This is a test push notification message";
+            var title = "Test title";
+            var message = "This is a test push notification message";
 
             //  Act
-            Pushover pclient = new Pushover(TEST_APP_KEY);
-            PushResponse response = await pclient.PushAsync(title, message);
+            var pclient = new Pushover(TEST_APP_KEY);
+            var response = await pclient.PushAsync(title, message);
 
             //  Assert - above code should error before this
             Assert.Fail();
@@ -62,12 +62,45 @@ namespace PushoverClient.Tests
         public async Task PushWithDefaultKey_ReturnsSuccessful()
         {
             //  Arrange
-            string title = "Test title";
-            string message = "This is a test push notification message";
+            var title = "Test title";
+            var message = "This is a test push notification message";
 
             //  Act
-            Pushover pclient = new Pushover(TEST_APP_KEY) { DefaultUserGroupSendKey = TEST_USER_KEY };
-            PushResponse response = await pclient.PushAsync(title, message);
+            var pclient = new Pushover(TEST_APP_KEY) { DefaultUserGroupSendKey = TEST_USER_KEY };
+            var response = await pclient.PushAsync(title, message);
+
+            //  Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(1, response.Status);
+        }
+
+        [TestMethod]
+        public async Task PushWithHighPriority_ReturnsSuccessful()
+        {
+            //  Arrange
+            var title = "Test title";
+            var message = "This is a test push notification message";
+            var priority = Priority.High;
+
+            //  Act
+            var pclient = new Pushover(TEST_APP_KEY) { DefaultUserGroupSendKey = TEST_USER_KEY };
+            var response = await pclient.PushAsync(title, message, priority: priority);
+
+            //  Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(1, response.Status);
+        }
+
+        [TestMethod]
+        public async Task PushWithSound_ReturnsSuccessful()
+        {
+            //  Arrange
+            var title = "Test title";
+            var message = "This is a test push notification message";
+
+            //  Act
+            var pclient = new Pushover(TEST_APP_KEY) { DefaultUserGroupSendKey = TEST_USER_KEY };
+            var response = await pclient.PushAsync(title, message, notificationSound: NotificationSound.Alien);
 
             //  Assert
             Assert.IsNotNull(response);
