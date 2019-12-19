@@ -10,5 +10,7 @@ namespace PushoverClient
         public string message { get; set; }
         public int priority { get; set; }
         public string sound { get; set; }
+        public string html { get; set; }
+        public string monospace { get; set; }
     }
 }
