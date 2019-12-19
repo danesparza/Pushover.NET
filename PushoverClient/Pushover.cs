@@ -1,5 +1,6 @@
 ﻿using ServiceStack;
 using System;
+using System.Globalization;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -63,10 +64,11 @@ namespace PushoverClient
         /// <param name="device">Send to a specific device</param>
         /// <param name="priority">Priority of the message (optional) default value set to Normal</param>
         /// <param name="notificationSound">If set sends the notification sound</param>
+        /// <param name="messageStyle">Sets the message text style</param>
         /// <returns></returns>
-        public PushResponse Push(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, NotificationSound notificationSound = NotificationSound.NotSet)
+        public PushResponse Push(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, NotificationSound notificationSound = NotificationSound.NotSet, MessageStyle messageStyle = MessageStyle.NotSet)
         {
-            var args = CreateArgs(title, message, userKey, device, priority, notificationSound);
+            var args = CreateArgs(title, message, userKey, device, priority, notificationSound, messageStyle);
             try
             {
                 return BASE_API_URL.PostToUrl(args).FromJson<PushResponse>();
@@ -86,10 +88,11 @@ namespace PushoverClient
         /// <param name="device">Send to a specific device</param>
         /// <param name="priority">Priority of the message (optional) default value set to Normal</param>
         /// <param name="notificationSound">If set sends the notification sound</param>
+        /// <param name="messageStyle">Sets the message text style</param>
         /// <returns></returns>
-        public async Task<PushResponse> PushAsync(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, NotificationSound notificationSound = NotificationSound.NotSet)
+        public async Task<PushResponse> PushAsync(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, NotificationSound notificationSound = NotificationSound.NotSet, MessageStyle messageStyle = MessageStyle.NotSet)
         {
-            var args = CreateArgs(title, message, userKey, device, priority, notificationSound);
+            var args = CreateArgs(title, message, userKey, device, priority, notificationSound, messageStyle);
             try
             {
                 return (await BASE_API_URL.PostToUrlAsync(args)).FromJson<PushResponse>();
@@ -101,8 +104,7 @@ namespace PushoverClient
         }
 
 
-
-        private object CreateArgs(string title, string message, string userKey, string device, Priority priority, NotificationSound notificationSound)
+        private object CreateArgs(string title, string message, string userKey, string device, Priority priority, NotificationSound notificationSound, MessageStyle messageStyle)
         {
             // Try the passed user key or fall back to default
             var userGroupKey = string.IsNullOrEmpty(userKey) ? DefaultUserGroupSendKey : userKey;
@@ -125,6 +127,15 @@ namespace PushoverClient
             if (notificationSound != NotificationSound.NotSet)
             {
                 args.sound = notificationSound.ToString().ToLower();
+            }
+
+            if (messageStyle == MessageStyle.html)
+            {
+                args.html = "1";
+            }
+            if (messageStyle == MessageStyle.monospace)
+            {
+                args.monospace = "1";
             }
 
             return args;

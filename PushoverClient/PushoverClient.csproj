@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MessageStyle.cs" />
     <Compile Include="NotificationSound.cs" />
     <Compile Include="Priority.cs" />
     <Compile Include="Pushover.cs" />

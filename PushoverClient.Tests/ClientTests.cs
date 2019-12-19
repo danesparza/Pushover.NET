@@ -106,5 +106,69 @@ namespace PushoverClient.Tests
             Assert.IsNotNull(response);
             Assert.AreEqual(1, response.Status);
         }
+
+        [TestMethod]
+        public void PushHtmlWithValidParms_ReturnsSuccessful()
+        {
+            //  Arrange
+            var title = "Test title";
+            var message = "This is a <b>bold test</b> with <i>italic</i> push notification message";
+
+            //  Act
+            var pclient = new Pushover(TEST_APP_KEY);
+            var response = pclient.Push(title, message, TEST_USER_KEY, "", Priority.Normal, NotificationSound.Bike, MessageStyle.html);
+
+            //  Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(1, response.Status);
+        }
+
+        [TestMethod]
+        public async Task PushHtmlAsyncWithValidParms_ReturnsSuccessful()
+        {
+            //  Arrange
+            var title = "Test title";
+            var message = "This is an async <b>bold test</b> with <i>italic</i> push notification message";
+
+            //  Act
+            var pclient = new Pushover(TEST_APP_KEY);
+            var response = await pclient.PushAsync(title, message, TEST_USER_KEY, "", Priority.Normal, NotificationSound.Bike, MessageStyle.html);
+
+            //  Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(1, response.Status);
+        }
+
+        [TestMethod]
+        public void PushMonospaceWithValidParms_ReturnsSuccessful()
+        {
+            //  Arrange
+            var title = "Test title";
+            var message = "This is a monospace test push notification message";
+
+            //  Act
+            var pclient = new Pushover(TEST_APP_KEY);
+            var response = pclient.Push(title, message, TEST_USER_KEY, "", Priority.Normal, NotificationSound.Bike, MessageStyle.monospace);
+
+            //  Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(1, response.Status);
+        }
+
+        [TestMethod]
+        public async Task PushMonospaceAsyncWithValidParms_ReturnsSuccessful()
+        {
+            //  Arrange
+            var title = "Test title";
+            var message = "This is an async monospace test push notification message";
+
+            //  Act
+            var pclient = new Pushover(TEST_APP_KEY);
+            var response = await pclient.PushAsync(title, message, TEST_USER_KEY, "", Priority.Normal, NotificationSound.Bike, MessageStyle.monospace);
+
+            //  Assert
+            Assert.IsNotNull(response);
+            Assert.AreEqual(1, response.Status);
+        }
     }
 }
