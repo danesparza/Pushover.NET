@@ -64,9 +64,9 @@ namespace PushoverClient
         /// <param name="priority">Priority of the message (optional) default value set to Normal</param>
         /// <param name="notificationSound">If set sends the notification sound</param>
         /// <returns></returns>
-        public PushResponse Push(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, NotificationSound notificationSound = NotificationSound.NotSet)
+        public PushResponse Push(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, DateTime? timestamp = null, NotificationSound notificationSound = NotificationSound.NotSet)
         {
-            var args = CreateArgs(title, message, userKey, device, priority, notificationSound);
+            var args = CreateArgs(title, message, userKey, device, priority, timestamp ?? DateTime.UtcNow, notificationSound);
             try
             {
                 return BASE_API_URL.PostToUrl(args).FromJson<PushResponse>();
@@ -87,9 +87,9 @@ namespace PushoverClient
         /// <param name="priority">Priority of the message (optional) default value set to Normal</param>
         /// <param name="notificationSound">If set sends the notification sound</param>
         /// <returns></returns>
-        public async Task<PushResponse> PushAsync(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, NotificationSound notificationSound = NotificationSound.NotSet)
+        public async Task<PushResponse> PushAsync(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, DateTime? timestamp = null, NotificationSound notificationSound = NotificationSound.NotSet)
         {
-            var args = CreateArgs(title, message, userKey, device, priority, notificationSound);
+            var args = CreateArgs(title, message, userKey, device, priority, timestamp?? DateTime.UtcNow, notificationSound);
             try
             {
                 return (await BASE_API_URL.PostToUrlAsync(args)).FromJson<PushResponse>();
@@ -102,7 +102,7 @@ namespace PushoverClient
 
 
 
-        private object CreateArgs(string title, string message, string userKey, string device, Priority priority, NotificationSound notificationSound)
+        private object CreateArgs(string title, string message, string userKey, string device, Priority priority, DateTime timestamp, NotificationSound notificationSound)
         {
             // Try the passed user key or fall back to default
             var userGroupKey = string.IsNullOrEmpty(userKey) ? DefaultUserGroupSendKey : userKey;
@@ -119,6 +119,7 @@ namespace PushoverClient
                 device = device,
                 title = title,
                 message = message,
+                timestamp = (int)timestamp.Subtract(new DateTime(1970, 1, 1)).TotalSeconds,
                 priority = (int)priority
             };
 

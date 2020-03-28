@@ -9,6 +9,7 @@ namespace PushoverClient
         public string title { get; set; }
         public string message { get; set; }
         public int priority { get; set; }
+        public int timestamp { get; set; }
         public string sound { get; set; }
     }
 }
