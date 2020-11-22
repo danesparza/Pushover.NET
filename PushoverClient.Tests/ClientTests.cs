@@ -92,6 +92,23 @@ namespace PushoverClient.Tests
         }
 
         [TestMethod]
+        public async Task PushWithEmergencyPriority_ReturnsSuccessful()
+        {
+          // Arrange
+          var title = "Test title";
+          var message = "This is a test push notification message";
+          var priority = Priority.Emergency;
+
+          //  Act
+          var pclient = new Pushover(TEST_APP_KEY) { DefaultUserGroupSendKey = TEST_USER_KEY };
+          var response = await pclient.PushAsync(title, message, priority: priority);
+
+          //  Assert
+          Assert.IsNotNull(response);
+          Assert.AreEqual(1, response.Status);
+        }
+
+        [TestMethod]
         public async Task PushWithSound_ReturnsSuccessful()
         {
             //  Arrange
