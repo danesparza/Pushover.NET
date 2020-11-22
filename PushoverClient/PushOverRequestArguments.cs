@@ -11,5 +11,7 @@ namespace PushoverClient
         public int priority { get; set; }
         public int timestamp { get; set; }
         public string sound { get; set; }
+        public int retry { get; set; }
+        public int expire { get; set; }
     }
 }
