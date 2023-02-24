@@ -1,6 +1,8 @@
-﻿using ServiceStack;
+﻿using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace PushoverClient
@@ -16,6 +18,11 @@ namespace PushoverClient
         /// </summary>
         private const string BASE_API_URL = "https://api.pushover.net/1/messages.json";
 
+        /// <summary>
+        /// The shared http client
+        /// </summary>
+        private readonly HttpClient Client = new HttpClient();
+        
         /// <summary>
         /// The application key
         /// </summary>
@@ -78,18 +85,14 @@ namespace PushoverClient
         /// <param name="device">Send to a specific device</param>
         /// <param name="priority">Priority of the message (optional) default value set to Normal</param>
         /// <param name="notificationSound">If set sends the notification sound</param>
+        /// <param name="attachment">If set sends a file attachment</param>
         /// <returns></returns>
-        public PushResponse Push(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, DateTime? timestamp = null, NotificationSound notificationSound = NotificationSound.NotSet)
+        public PushResponse Push(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, DateTime? timestamp = null, NotificationSound notificationSound = NotificationSound.NotSet, PushoverFileAttachment attachment = null)
         {
-            var args = CreateArgs(title, message, userKey, device, priority, timestamp ?? DateTime.UtcNow, notificationSound);
-            try
-            {
-                return BASE_API_URL.PostToUrl(args).FromJson<PushResponse>();
-            }
-            catch (WebException webEx)
-            {
-                return webEx.GetResponseBody().FromJson<PushResponse>();
-            }
+            ValidateAttachment(attachment);
+            var task = PostAsync(CreateArgs(title, message, userKey, device, priority, timestamp ?? DateTime.UtcNow, notificationSound), attachment);
+            task.Wait();
+            return task.Result;
         }
 
         /// <summary>
@@ -101,23 +104,15 @@ namespace PushoverClient
         /// <param name="device">Send to a specific device</param>
         /// <param name="priority">Priority of the message (optional) default value set to Normal</param>
         /// <param name="notificationSound">If set sends the notification sound</param>
+        /// <param name="attachment">If set sends a file attachment</param>
         /// <returns></returns>
-        public async Task<PushResponse> PushAsync(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, DateTime? timestamp = null, NotificationSound notificationSound = NotificationSound.NotSet)
+        public async Task<PushResponse> PushAsync(string title, string message, string userKey = "", string device = "", Priority priority = Priority.Normal, DateTime? timestamp = null, NotificationSound notificationSound = NotificationSound.NotSet, PushoverFileAttachment attachment = null)
         {
-            var args = CreateArgs(title, message, userKey, device, priority, timestamp?? DateTime.UtcNow, notificationSound);
-            try
-            {
-                return (await BASE_API_URL.PostToUrlAsync(args)).FromJson<PushResponse>();
-            }
-            catch (WebException webEx)
-            {
-                return webEx.GetResponseBody().FromJson<PushResponse>();
-            }
+            ValidateAttachment(attachment);
+            return await PostAsync(CreateArgs(title, message, userKey, device, priority, timestamp ?? DateTime.UtcNow, notificationSound), attachment);          
         }
 
-
-
-        private object CreateArgs(string title, string message, string userKey, string device, Priority priority, DateTime timestamp, NotificationSound notificationSound)
+        private PushoverRequestArguments CreateArgs(string title, string message, string userKey, string device, Priority priority, DateTime timestamp, NotificationSound notificationSound)
         {
             // Try the passed user key or fall back to default
             var userGroupKey = string.IsNullOrEmpty(userKey) ? DefaultUserGroupSendKey : userKey;
@@ -152,6 +147,74 @@ namespace PushoverClient
             return args;
         }
 
+        private void ValidateAttachment(PushoverFileAttachment attachment)
+        {
+            // No attachment is fine.
+            if(attachment == null)
+            {
+                return;
+            }
+            attachment.Validate();
+        }
 
+        private async Task<PushResponse> PostAsync(PushoverRequestArguments args, PushoverFileAttachment attachment)
+        {
+            StreamContent fileContent = null;
+            try
+            {
+                using (var content = new MultipartFormDataContent())
+                {
+                    // Add the required fields (or their defaults)
+                    content.Add(new StringContent(args.token), "token");
+                    content.Add(new StringContent(args.user), "user");
+                    content.Add(new StringContent(args.device), "device");
+                    content.Add(new StringContent(args.title), "title");
+                    content.Add(new StringContent(args.message), "message");
+                    content.Add(new StringContent(args.timestamp.ToString()), "timestamp");
+                    content.Add(new StringContent(args.priority.ToString()), "priority");
+
+                    // Add the attachment if there is one.
+                    if (attachment != null)
+                    {
+                        fileContent = new StreamContent(attachment.FileStream);
+                        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(attachment.ContentType);
+                        fileContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data")
+                        {
+                            Name = "attachment",
+                            FileName = attachment.FileName
+                        };
+                        content.Add(fileContent);
+                    }
+
+                    // Make the request.
+                    try
+                    {
+                        var result = await Client.PostAsync(BASE_API_URL, content);
+                        // Always try to read the body as the expected json result, even if the status code is not OK.
+                        return await ReadStreamAsync(await result.Content.ReadAsStreamAsync());
+                    }
+                    catch (WebException webEx)
+                    {
+                        return await ReadStreamAsync(webEx.Response.GetResponseStream());
+                    }
+                }
+            }
+            finally
+            {
+                // Dispose of the file content, if there is one.
+                if(fileContent != null)
+                {
+                    fileContent.Dispose();
+                }
+            }
+        }
+
+        private async Task<PushResponse> ReadStreamAsync(Stream s)
+        {
+            using (var sr = new StreamReader(s))
+            {
+                return JsonConvert.DeserializeObject<PushResponse>(await sr.ReadToEndAsync());
+            }
+        }
     }
 }
