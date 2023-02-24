@@ -35,6 +35,21 @@ namespace PushoverClient
         }
 
         /// <summary>
+        /// The interval (in seconds) between repeating notifications for
+        /// <see cref="Priority.Emergency"/> priority messages. Pushover
+        /// servers keep sending emergency priority messages until they
+        /// are either acknowledged or the acknowledgement time expires
+        /// (<see cref="EmergencyExpiryInterval"/>).
+        /// </summary>
+        public int EmergencyRetryInterval { get; set; } = 60; // Seconds
+
+        /// <summary>
+        /// The interval (in seconds) before <see cref="Priority.Emergency"/>
+        /// messages expire. 
+        /// </summary>
+        public int EmergencyExpiryInterval { get; set; } = 300; // Seconds;
+
+        /// <summary>
         /// Create a pushover client using a source application key.
         /// </summary>
         /// <param name="appKey"></param>
@@ -126,6 +141,12 @@ namespace PushoverClient
             if (notificationSound != NotificationSound.NotSet)
             {
                 args.sound = notificationSound.ToString().ToLower();
+            }
+
+            if (priority == Priority.Emergency)
+            {
+                args.retry = EmergencyRetryInterval;
+                args.expire = EmergencyExpiryInterval;
             }
 
             return args;
